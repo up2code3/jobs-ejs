@@ -7,11 +7,13 @@ const app = express();
 require("dotenv").config();
 
 const session = require("express-session");
+
 const MongoDBStore = require("connect-mongodb-session")(session);
 const url = process.env.MONGO_URI;
 
 //set up session store
 const store = new MongoDBStore({
+
     uri: url,
     collection: "mysessions",
 })
@@ -27,7 +29,9 @@ const sessionParms = {
     cookie: { secure: false, sameSite: "strict"},
 };
 
+
 //configure secure cookies for production
+
 if (app.get("env") === "production") {
     //trust first proxy
     app.set("trust proxy", 1);
@@ -36,6 +40,7 @@ if (app.get("env") === "production") {
 }
 
 app.use(session(sessionParms));
+
 app.use(require("connect-flash")());
 
 //body parser should be before passport
@@ -62,6 +67,7 @@ const auth = require("./middleware/auth")
 const secretWordRouter = require("./routes/secretWord");
 app.use("/secretWord", auth, secretWordRouter)
 
+
 app.use((req, res) => {
     res.status(404).send(`Page (${req.url}) not found`);
 });
@@ -75,7 +81,9 @@ const port = process.env.PORT || 3000;
 
 const start = async () => {
     try {
+
         await require("./db/connect")(process.env.MONGO_URI);
+
         app.listen(port, () => 
             console.log(`Server is listening on PORT ${port}...`)
     );
@@ -84,10 +92,6 @@ const start = async () => {
     }
 };
 
+
 start();
-
-
-
-
-
 
