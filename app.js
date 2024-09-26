@@ -8,6 +8,7 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require('host-csrf')
 const cookieParser = require("cookie-parser")
+const jobs = require("./routes/jobs")
 require("express-async-errors")
 require("dotenv").config();
 
@@ -91,11 +92,12 @@ app.use("/sessions", require("./routes/sessionRoutes"))
 
 app.use("/secretWord", auth, secretWordRouter)
 
+app.use("/jobs", auth, jobs);
 
 app.use((req, res) => {
     res.status(404).send(`Page (${req.url}) not found`);
 });
-
+ 
 app.use((err, req, res, next) => {
     res.status(500).send(err.message);
     console.log(err);
