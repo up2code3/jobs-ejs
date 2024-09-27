@@ -9,17 +9,32 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require('host-csrf')
 const cookieParser = require("cookie-parser")
 const jobs = require("./routes/jobs")
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+
 require("express-async-errors")
 require("dotenv").config();
 
 const app = express();
 
+app.use(helmet());
+app.use(xss())
+console.log("xss is running")
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 1000,
+    message: "too many requests, please try later",
+});
+app.use(limiter)
+
+
 //to load the .env file into the process.env object
 const url = process.env.MONGO_URI;
 
-//set up session store
+//set up session store 
 const store = new MongoDBStore({
-
+    
     uri: url,
     collection: "mysessions",
 })

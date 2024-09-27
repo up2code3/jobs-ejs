@@ -13,9 +13,16 @@ const getJobs = async (req, res) => {
     res.render("jobs", { jobs }); 
 };
 
+//renders new job form
+const newJob = async (req, res) => {
+    res.render("job", {job:null})
+}
+
 //Add job button @bottom of newJob form
 const addJob = async (req, res) => {
     try {
+        console.log("Raw input:", req.body);
+        console.log("Sanitized Input:", req.body.position)
 //prepare the job data
         const jobData = {
             company: req.body.company,
@@ -25,7 +32,6 @@ const addJob = async (req, res) => {
         };
 //use Job model to create new entry w/ JobData object from above
         const newJob = await Job.create(jobData)
-        console.log(newJob)
 //send user back to all jobs page
         res.redirect("/jobs")
 //if error occurs creating new entry
@@ -35,11 +41,6 @@ const addJob = async (req, res) => {
         res.render("Job", { job: null, errors: validationErrors });
     }
 };
-
-//renders new job form
-const newJob = async (req, res) => {
-    res.render("job", {job:null})
-}
 
 //renders edit job form
 const editJob = async (req, res) => {
