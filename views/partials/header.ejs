@@ -3,7 +3,8 @@
 <% if (user) { %>
 <p>User <%= user.name %> is logged on.</p>
 <form method="POST" action="/sessions/logoff">
-  <button>Logoff</button>
+  <input type="hidden" name="_csrf" value="<%= _csrf %>">
+  <button>LOG OFF</button>
 </form>
 <% } %> <% if (errors) { errors.forEach((err) => { %>
 <div>Error: <%= err %></div>

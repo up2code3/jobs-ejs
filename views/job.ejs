@@ -1,0 +1,30 @@
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<h2><%= job ? "Edit Job" : "Add Job" %></h2>
+
+<form action="<%= job ? `/jobs/update/${job.id}` : "/jobs" %>" method="POST">
+      <input type="hidden" name="_csrf" value="<%= _csrf %>">
+  <div>
+    <label for="company">Company:</label>
+    <input type="text" id="company" name="company" value="<%= job ? job.company : '' %>" required>
+  </div>
+   
+  <div>
+    <label for="position">Position:</label>
+    <input type="text" id="position" name="position" value="<%= job ? job.position : '' %>" required>
+  </div>
+  
+  <div>
+    <label for="status">Status:</label>
+    <select id="status" name="status" required>
+      <option value="pending" <%= job && job.status === 'pending' ? 'selected' : '' %>>Pending</option>
+      <option value="interview" <%= job && job.status === 'interview' ? 'selected' : '' %>>Interview</option>
+      <option value="declined" <%= job && job.status === 'declined' ? 'selected' : '' %>>Declined</option>
+    </select>
+  </div>
+
+  <button type="submit"><%= job ? "Update" : "Add" %> Job</button>
+</form>
+
+<%- include("partials/footer.ejs") %>

@@ -1,19 +1,40 @@
+
+const auth = require("./middleware/auth")
+const secretWordRouter = require("./routes/secretWord");
+const passport = require("passport");
+const passportInit = require("./passport/passportInit")
 const express = require("express");
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
+const csrf = require('host-csrf')
+const cookieParser = require("cookie-parser")
+const jobs = require("./routes/jobs")
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+
 require("express-async-errors")
+require("dotenv").config();
 
 const app = express();
 
+app.use(helmet());
+app.use(xss())
+console.log("xss is running")
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 1000,
+    message: "too many requests, please try later",
+});
+app.use(limiter)
+
+
 //to load the .env file into the process.env object
-require("dotenv").config();
-
-const session = require("express-session");
-
-const MongoDBStore = require("connect-mongodb-session")(session);
 const url = process.env.MONGO_URI;
 
-//set up session store
+//set up session store 
 const store = new MongoDBStore({
-
+    
     uri: url,
     collection: "mysessions",
 })
@@ -46,9 +67,30 @@ app.use(require("connect-flash")());
 //body parser should be before passport
 app.use(require("body-parser").urlencoded({ extended: true}));
 
+app.use(cookieParser(process.env.SESSION_SECRET))
+
+//CSRF middleware setup
+let csrf_development_mode = true;
+
+if (app.get("env") === "production"){
+    csrf_development_mode = false;
+}
+const csrf_options = {
+    protected_operations: ["PATCH"], 
+    protected_content_types: ["application/json"],
+    development_mode: csrf_development_mode,
+};
+
+const csrf_middleware = csrf(csrf_options);
+
+app.use(csrf_middleware)
+
+app.get("/get_token", (req, res) => {
+    const csrfToken = csrf.token(req,res);
+    res.json({csrfToken})
+})
+
 //initialize Passport
-const passport = require("passport");
-const passportInit = require("./passport/passportInit")
 passportInit();
 app.use(passport.initialize())
 app.use(passport.session())
@@ -63,15 +105,14 @@ app.get("/", (req, res) => {
 
 app.use("/sessions", require("./routes/sessionRoutes"))
 
-const auth = require("./middleware/auth")
-const secretWordRouter = require("./routes/secretWord");
 app.use("/secretWord", auth, secretWordRouter)
 
+app.use("/jobs", auth, jobs);
 
 app.use((req, res) => {
     res.status(404).send(`Page (${req.url}) not found`);
 });
-
+ 
 app.use((err, req, res, next) => {
     res.status(500).send(err.message);
     console.log(err);
