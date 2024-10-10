@@ -18,6 +18,12 @@ require("dotenv").config();
 
 const app = express();
 
+//old way of parsing
+//app.use(require("body-parser").urlencoded({ extended: true}));
+
+//new way of parsing
+app.use(express.urlencoded({ extended: true }));
+
 app.use(helmet());
 app.use(xss())
 console.log("xss is running")
@@ -30,12 +36,20 @@ app.use(limiter)
 
 
 //to load the .env file into the process.env object
-const url = process.env.MONGO_URI;
+
+//The original way
+// const url = process.env.MONGO_URI;
+
+//the Test way
+let mongoURL = process.env.MONGO_URI;
+if (process.env.NODE_ENV == "test") {
+  mongoURL = process.env.MONGO_URI_TEST;
+}
 
 //set up session store 
 const store = new MongoDBStore({
     
-    uri: url,
+    uri: mongoURL,
     collection: "mysessions",
 })
 store.on("error", function (error){
@@ -65,7 +79,6 @@ app.use(session(sessionParms));
 app.use(require("connect-flash")());
 
 //body parser should be before passport
-app.use(require("body-parser").urlencoded({ extended: true}));
 
 app.use(cookieParser(process.env.SESSION_SECRET))
 
@@ -96,12 +109,32 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(require("./middleware/storeLocals"));
 
+//chai content-type fix
+app.use((req, res, next) => {
+    if (req.path == "/multiply"){
+        res.set("Content-Type", "application/json");
+    }else{
+        res.set("Content-Type", "text/html");
+    }
+    next();
+})
+
 //set up view and engine routes
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
     res.render("index");
 });
+
+app.get("/multiply", (req, res) => {
+    const result = req.query.first * req.query.second;
+    if (result.isNaN){
+        result = "NaN";
+    }else if (result == null) {
+        result = "null"
+    }
+    res.json({ result: result });
+})
 
 app.use("/sessions", require("./routes/sessionRoutes"))
 
@@ -120,14 +153,12 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 3000;
 
-const start = async () => {
+const start = () => {
     try {
-
-        await require("./db/connect")(process.env.MONGO_URI);
-
-        app.listen(port, () => 
+        require("./db/connect")(mongoURL);
+        return app.listen(port, () => 
             console.log(`Server is listening on PORT ${port}...`)
-    );
+        );
     } catch (error) {
         console.log(error);
     }
@@ -135,4 +166,8 @@ const start = async () => {
 
 
 start();
+
+module.exports = { app }
+
+
 
