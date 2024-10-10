@@ -22,7 +22,7 @@ const newJob = async (req, res) => {
 const addJob = async (req, res) => {
     try {
         console.log("Raw input:", req.body);
-        console.log("Sanitized Input:", req.body.position)
+        console.log("Sanitized Input:", "\nCompnay Field:" , req.body.company, "\nPosition Field:", req.body.position, "\nStatus Field:", req.body.status)
 //prepare the job data
         const jobData = {
             company: req.body.company,
