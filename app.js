@@ -8,7 +8,7 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require('host-csrf')
 const cookieParser = require("cookie-parser")
-const jobs = require("./routes/jobs")
+const albums = require("./routes/albums")
 const helmet = require("helmet");
 const xss = require("xss-clean");
 const rateLimit = require("express-rate-limit");
@@ -140,7 +140,7 @@ app.use("/sessions", require("./routes/sessionRoutes"))
 
 app.use("/secretWord", auth, secretWordRouter)
 
-app.use("/jobs", auth, jobs);
+app.use("/albums", auth, albums);
 
 app.use((req, res) => {
     res.status(404).send(`Page (${req.url}) not found`);

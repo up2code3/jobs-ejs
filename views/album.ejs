@@ -1,0 +1,32 @@
+<%- include("partials/head.ejs") %>
+<%- include("partials/header.ejs") %>
+
+<!-- edit or add Screen -->
+
+<h2><%= album ? "Edit Album" : "Add Album" %></h2>
+
+<form action="<%= album ? `/albums/update/${album.id}` : "/albums" %>" method="POST">
+      <input type="hidden" name="_csrf" value="<%= _csrf %>">
+  <div>
+    <label for="artist">Artist:</label>
+    <input type="text" id="artist" name="artist" value="<%= album ? album.artist : '' %>" required>
+  </div>
+   
+  <div>
+    <label for="album">Album:</label>
+    <input type="text" id="album" name="album" value="<%= album ? album.album : '' %>" required>
+  </div>
+  
+  <div>
+    <label for="condition">Condition:</label>
+    <select id="condition" name="condition" required>
+      <option value="Mint" <%= album && album.condition === 'Mint' ? 'selected' : '' %>>Mint</option>
+      <option value="Very Good" <%= album && album.condition === 'Very Good' ? 'selected' : '' %>>Very Good</option>
+      <option value="Good" <%= album && album.condition === 'Good' ? 'selected' : '' %>>Good</option>
+    </select>
+  </div>
+
+  <button type="submit"><%= album ? "Update" : "Add" %> Album</button>
+</form>
+
+<%- include("partials/footer.ejs") %>

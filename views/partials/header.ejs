@@ -1,7 +1,7 @@
 
-<h1>The Jobs EJS APPlication</h1>
+<h1>Milk Crate Albums</h1>
 <% if (user) { %>
-<p>User <%= user.name %> is logged on.</p>
+<h2> <%= user.name %>'s Crate.</h2>
 <form method="POST" action="/sessions/logoff">
   <input type="hidden" name="_csrf" value="<%= _csrf %>">
   <button>LOG OFF</button>

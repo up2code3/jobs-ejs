@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test mocha tests/*.js --timeout 5000 --exit",
-    "node": "node app.js",
+    "nodemon": "nodemon app.js",
     "start": "node app.js"
   },
   "author": "",
