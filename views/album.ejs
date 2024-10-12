@@ -26,6 +26,12 @@
     </select>
   </div>
 
+  <div>
+    <label for="digitalRelease">Digital Release Only</label>
+    <input type="checkbox" id="digitalRelease" name="digitalRelease" value="true" >
+    <input type="hidden" name="digitalRelease" value="false">
+  </div>
+
   <button type="submit"><%= album ? "Update" : "Add" %> Album</button>
 </form>
 

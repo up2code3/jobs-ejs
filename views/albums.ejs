@@ -1,14 +1,33 @@
 <%- include("partials/head.ejs") %>
 <%- include("partials/header.ejs") %>
-<h2>Albums List</h2>
+
+<style>
+  table{
+    /* prevent overlapping */
+    border-collapse:collapse;
+    width:100%;
+  }
+  th, td {
+    border: 2px solid black;
+    padding:8px;
+    text-align:justify;
+  }
+  th {
+    background-color: #a0dbf9; /* Optional: makes the header stand out */
+  }
+</style>
+
+
+
 
 <!-- Show all albums table  -->
-
+<h2>Albums List</h2>
 <table id="albums-table">
   <tr id="albums-table-header">
     <th>Artist</th>
     <th>Album</th>
     <th>Condition</th>
+    <th>Digital Release Only</th>
     <th colspan="2"></th>
   </tr>
   <% if (albums && albums.length) { %>
@@ -17,6 +36,7 @@
         <td><%= album.artist %></td>
         <td><%= album.album %></td>
         <td><%= album.condition %></td>
+        <td><%= album.digitalRelease ? 'Yes' : 'No' %> </td>
         
         <td>
             <a href="/albums/edit/<%= album.id %>"><button type="button">Edit</button></a>

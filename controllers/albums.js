@@ -24,6 +24,7 @@ const addAlbum = async (req, res) => {
             artist: req.body.artist,
             album: req.body.album,
             condition: req.body.condition,
+            digitalRelease: req.body.digitalRelease,
             createdBy: req.user._id,
         };
 //use Album model to create new entry w/ AlbumData object from above
