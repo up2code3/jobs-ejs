@@ -136,6 +136,8 @@ app.get("/multiply", (req, res) => {
     res.json({ result: result });
 })
 
+app.use(express.static('Public'));
+
 app.use("/sessions", require("./routes/sessionRoutes"))
 
 app.use("/secretWord", auth, secretWordRouter)

@@ -1,11 +1,27 @@
 
-<h1>Milk Crate Albums</h1>
+<style>
+  .VhandsHead {
+      background-image: url('/images/VinylHands2.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 100px; /* Adjust this height as needed */
+      display: flex; /* Center content vertically */
+      align-items:start; /* Center content vertically */
+      justify-content: left; /* Center content horizontally */
+      color: white; /
+  }
+  .pHead{
+      margin: 8px;
+      font-weight: bold;
+      font-size: 2rem;
+  }
+</style>
+
+
+<h1 class="VhandsHead">Milk Crate Albums</h1>
 <% if (user) { %>
-<h2> <%= user.name %>'s Crate.</h2>
-<form method="POST" action="/sessions/logoff">
-  <input type="hidden" name="_csrf" value="<%= _csrf %>">
-  <button>LOG OFF</button>
-</form>
+
+<h2> <%= user.name %>'s Crate</h2>
 <% } %> <% if (errors) { errors.forEach((err) => { %>
 <div>Error: <%= err %></div>
 <% }) } %> <% if (info) { info.forEach((msg) => { %>

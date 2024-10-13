@@ -20,8 +20,7 @@
 
 
 
-<!-- Show all albums table  -->
-<h2>Albums List</h2>
+
 <table id="albums-table">
   <tr id="albums-table-header">
     <th>Artist</th>
@@ -30,6 +29,9 @@
     <th>Digital Release Only</th>
     <th colspan="2"></th>
   </tr>
+  <div> 
+    <a href="/albums/new"><button type="button">Add New Album</button></a>
+  </div>
   <% if (albums && albums.length) { %>
     <% albums.forEach((album) => { %>
       <tr>
@@ -53,8 +55,8 @@
     <% }) %>
   <% } %>
 </table>
-<div>
-  
-  <a href="/albums/new"><button type="button">Add New Album</button></a>
-</div>
+<form method="POST" action="/sessions/logoff">
+  <input type="hidden" name="_csrf" value="<%= _csrf %>">
+  <button>LOG OFF</button>
+</form>
 <%- include("partials/footer.ejs") %>
