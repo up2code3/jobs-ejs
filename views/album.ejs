@@ -1,39 +1,66 @@
 <%- include("partials/head.ejs") %>
 <%- include("partials/header.ejs") %>
 
-<!-- edit or add Screen -->
-
+<!-- pending on what the user clicked to get here, 
+it will display a h2 of edit or add -->
 <h2><%= album ? "Edit Album" : "Add Album" %></h2>
 
+<!-- below si the form for add or edit, same for each btw -->
 <form action="<%= album ? `/albums/update/${album.id}` : "/albums" %>" method="POST">
       <input type="hidden" name="_csrf" value="<%= _csrf %>">
   <hr />
+
+  <!-- Add artist name here -->
   <div>
     <label for="artist">Artist:</label>
     <input type="text" id="artist" name="artist" value="<%= album ? album.artist : '' %>" required>
   </div>
   <hr />
+
+  <!-- Add album name here -->
   <div>
     <label for="album">Album:</label>
     <input type="text" id="album" name="album" value="<%= album ? album.album : '' %>" required>
   </div>
   <hr />
+
+  <!-- Choose the physical condition of the Vinyl via enum options here-->
   <div>
     <label for="condition">Condition:</label>
     <select id="condition" name="condition" required>
       <option value="Mint" <%= album && album.condition === 'Mint' ? 'selected' : '' %>>Mint</option>
       <option value="Very Good" <%= album && album.condition === 'Very Good' ? 'selected' : '' %>>Very Good</option>
       <option value="Good" <%= album && album.condition === 'Good' ? 'selected' : '' %>>Good</option>
+      <option value="Poor" <%= album && album.condition === 'Poor' ? 'selected' : '' %>>Poor</option>
+      <option value="N/A" <%= album && album.condition === 'N/A' ? 'selected' : '' %>>N/A</option>
     </select>
   </div>
   <hr />
+  
+  <!-- check box if album was only released digitally and there is not a physical copy -->
   <div>
     <label for="digitalRelease">Digital Release Only</label>
-
-    <!-- below is if checkbox is ticked -->  
     <input type="checkbox" id="digitalRelease" name="digitalRelease" value="true">
-</div>
-<hr />
+  </div>
+  <hr />
+
+  <!-- Select number of stars 1 - 5 for album rating  -->
+  <div>
+    <label for="rating">Rating</label>
+    <div>
+      <input type="radio" id="rating1" name="rating" value="1" <%= album && album.rating === 1 ? 'checked' : '' %> >
+      <label for="rating1">1 star</label>
+      <input type="radio" id="rating2" name="rating" value="2" <%= album && album.rating === 2 ? 'checked' : '' %> >
+      <label for="rating1">2 star</label>
+      <input type="radio" id="rating3" name="rating" value="3" <%= album && album.rating === 3 ? 'checked' : '' %> >
+      <label for="rating1">3 star</label>
+      <input type="radio" id="rating4" name="rating" value="4" <%= album && album.rating === 4 ? 'checked' : '' %> >
+      <label for="rating1">4 star</label>
+      <input type="radio" id="rating5" name="rating" value="5" <%= album && album.rating === 5 ? 'checked' : '' %> >
+      <label for="rating1">5 star</label>
+    </div>
+  </div>
+  <!-- sumbit button for add new album -->
   <button type="submit"><%= album ? "Update" : "Add" %> Album</button>
 </form>
 

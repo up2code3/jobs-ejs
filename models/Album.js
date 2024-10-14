@@ -14,12 +14,18 @@ const mongoose = require('mongoose')
     },
     condition:{
         type:String,
-        enum:['Mint','Very Good','Good','Poor'],
+        enum:['Mint','Very Good','Good','Poor','N/A'],
         required:[true, 'Please select Condtion of Vinyl']
     },
     digitalRelease:{
         type: Boolean,
         default: false,
+    },
+    rating:{
+        type: Number,
+        required:[true, 'Please Rate the album on a scale of 1 - 5'],
+        min:1,
+        max:5
     },
     createdBy:{
         type: mongoose.Types.ObjectId,

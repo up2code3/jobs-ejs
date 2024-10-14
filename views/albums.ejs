@@ -26,18 +26,31 @@
     <th>Artist</th>
     <th>Album</th>
     <th>Condition</th>
+    <th>Rating</th>
     <th>Digital Release Only</th>
-    <th colspan="2"></th>
+    <th colspan="3"></th>
   </tr>
   <div> 
     <a href="/albums/new"><button type="button">Add New Album</button></a>
   </div>
+  <hr />
   <% if (albums && albums.length) { %>
     <% albums.forEach((album) => { %>
       <tr>
         <td><%= album.artist %></td>
         <td><%= album.album %></td>
         <td><%= album.condition %></td>
+        <!-- for loop 5x 
+        iteration > rating = outlineStar
+        iteration < rating = filledStar 
+        -->
+        <td>
+          <% for (let i = 1; i <= 5; i++) { %>
+            <span>
+              <%= album.rating >= i ? '★' : '☆' %>
+            </span>
+          <% } %>
+        </td>
         <td><%= album.digitalRelease ? 'Yes' : 'No' %> </td>
         
         <td>
@@ -51,10 +64,12 @@
           </form>
         </td>
       </tr> 
+
       
     <% }) %>
   <% } %>
 </table>
+<hr />
 <form method="POST" action="/sessions/logoff">
   <input type="hidden" name="_csrf" value="<%= _csrf %>">
   <button>LOG OFF</button>

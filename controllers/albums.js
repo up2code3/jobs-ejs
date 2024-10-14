@@ -25,6 +25,7 @@ const addAlbum = async (req, res) => {
             album: req.body.album,
             condition: req.body.condition,
             digitalRelease: req.body.digitalRelease,
+            rating: req.body.rating,
             createdBy: req.user._id,
         };
 //use Album model to create new entry w/ AlbumData object from above
@@ -58,8 +59,10 @@ const updateAlbum = async (req, res) => {
         artist: req.body.artist,
         album: req.body.album,
         condition: req.body.condition,
+        digitalRelease: req.body.digitalRelease,
+        rating: req.body.rating,
         createdBy: req.user._id,
-    }
+    };
     const updatedAlbum = await Album.findByIdAndUpdate(id, albumData, {new: true});
 // Just in case , maybe this should be in editAlbum function?
     if (!updatedAlbum){
