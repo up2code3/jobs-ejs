@@ -1,5 +1,5 @@
 const multiply = require("../utils/multiply.js")
-const get_chai = require("../utils/get_chai")
+const get_chai = require("../utils/get_chai.js")
 
 describe("testing multiply", () => {
      it("should give 7*6 is 42", async () => {

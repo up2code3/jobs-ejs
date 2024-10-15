@@ -1,10 +1,10 @@
-const Job = require("../models/Job")
+const Album = require("../models/Album")
 const { seed_db, testUserPassword } = require("../utils/seed_db")
 const get_chai = require("../utils/get_chai");
 const { app } = require("../app");
 const { factory } = require("../utils/seed_db")
 
-describe("Job List Test", function () {
+describe("Album List Test", function () {
 
     //the set up 
     before(async () => {
@@ -41,14 +41,14 @@ describe("Job List Test", function () {
     expect(this.csrfCookie).to.not.be.undefined;
     });
 
-    //test 1 get job list aka dispaly all jobs
-    it("Get job list", async () => {
+    //test 1 get album list aka dispaly all albums
+    it("Get album list", async () => {
     const { expect, request } = await get_chai();
 
-    //make the get request to job list page
+    //make the get request to album list page
     const res = await request
         .execute(app)
-        .get("/jobs")
+        .get("/albums")
         //set cookie to simulate logged in user
         .set("Cookie", this.sessionCookie) 
         .send();
@@ -56,37 +56,39 @@ describe("Job List Test", function () {
         //assert a status of 200
         expect(res).to.have.status(200);
 
-        //our job counter logic
+        //our album counter logic
         const pageParts = res.text.split("<tr>")
         expect(pageParts.length).to.equal(4)
   
     });
-    // test 2 create new job (using seed_db)
-    it("Add Job Entry", async () => {
+    // test 2 create new album (using seed_db)
+    it("Add Album Entry", async () => {
         const { expect, request } = await get_chai();
 
-        //create new job
-        const newJobData = await factory.build("job");
+        //create new album
+        const newAlbumData = await factory.build("album");
        
-        //prepare job data
+        //prepare album data
         const postData = {
-          company: newJobData.company,
-          position: newJobData.position,
-          status: newJobData.status, 
+          artist: newAlbumData.artist,
+          album: newAlbumData.album,
+          condition: newAlbumData.condition,
+          rating: newAlbumData.rating,
+          digitalRelease: newAlbumData.digitalRelease, 
           _csrf: this.csrfToken,
         };
 
         //the POST request
         const res = await request
           .execute(app)
-          .post("/jobs")
+          .post("/albums")
           .set("Cookie", [this.csrfCookie, this.sessionCookie])
           .set("content-type", "application/x-www-form-urlencoded")
           .send(postData)
 
         expect(res).to.have.status(200)
-        const jobs = await Job.find({createdBy: this.test_user._id})
-        expect(jobs.length).to.equal(4)
+        const albums = await Album.find({createdBy: this.test_user._id})
+        expect(albums.length).to.equal(4)
     })
     
 });
