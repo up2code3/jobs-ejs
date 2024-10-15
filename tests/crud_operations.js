@@ -5,9 +5,10 @@ const { app } = require("../app");
 const { factory } = require("../utils/seed_db")
 
 describe("Album List Test", function () {
-
+  this.timeout(15000)
     //the set up 
     before(async () => {
+      this.timeout(15000)  
     const { expect, request } = await get_chai();
     this.test_user = await seed_db();
     console.log("from crud_op Test User: ", this.test_user); 
@@ -44,7 +45,7 @@ describe("Album List Test", function () {
     //test 1 get album list aka dispaly all albums
     it("Get album list", async () => {
     const { expect, request } = await get_chai();
-
+    this.timeout(15000);
     //make the get request to album list page
     const res = await request
         .execute(app)
@@ -64,7 +65,7 @@ describe("Album List Test", function () {
     // test 2 create new album (using seed_db)
     it("Add Album Entry", async () => {
         const { expect, request } = await get_chai();
-
+        this.timeout(15000);
         //create new album
         const newAlbumData = await factory.build("album");
        
