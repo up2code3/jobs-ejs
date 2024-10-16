@@ -1,5 +1,5 @@
 
-const auth = require("./middleware/auth")
+const auth = require("./middleware/auth.js")
 const secretWordRouter = require("./routes/secretWord");
 const passport = require("passport");
 const passportInit = require("./passport/passportInit")
