@@ -38,8 +38,8 @@ const seed_db = async () => {
     let testUser = null;
     try {
         const mongoURL = process.env.MONGO_URI_TEST;
-        await Album.deleteMany({}); //deletes all album records
-        await User.deleteMany({}); // deletes all user records   
+        // await Album.deleteMany({}); //deletes all album records
+        // await User.deleteMany({}); // deletes all user records   
 //create a bew user
         testUser = await factory.create("user", {password: testUserPassword });
         console.log("seed_db: the new user" , testUser)
