@@ -136,7 +136,7 @@ app.get("/multiply", (req, res) => {
     res.json({ result: result });
 })
 
-app.use(express.static('Public'));
+app.use(express.static('public'));
 
 app.use("/sessions", require("./routes/sessionRoutes"))
 
